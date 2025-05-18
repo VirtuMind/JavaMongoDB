@@ -70,12 +70,12 @@ public class ClientPanel extends JPanel {
 
     private void addClient(ActionEvent e) {
         try{
-            Client c = new Client(nomField.getText(), prenomField.getText(), adresseField.getText(), telephoneField.getText(), codePostalField.getText());
+            Client c = new Client(nomField.getText(), prenomField.getText(), adresseField.getText(), telephoneField.getText(), Integer.parseInt(codePostalField.getText()));
             dao.createClient(c);
             loadData();
         }
         catch(NumberFormatException ex){
-            JOptionPane.showMessageDialog(this, "Téléphone et code postal doivent etre des nombres", "Données invalides", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Code postal doit etre un nombre", "Données invalides", JOptionPane.ERROR_MESSAGE);
         }
         catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erreur: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -91,7 +91,7 @@ public class ClientPanel extends JPanel {
                 (String) tableModel.getValueAt(row, 2),
                 (String) tableModel.getValueAt(row, 3),
                 (String) tableModel.getValueAt(row, 4),
-                (String) tableModel.getValueAt(row, 5)
+                 Integer.parseInt((String) tableModel.getValueAt(row, 5))
         );
         c.setId(id);
         dao.updateClient(c);

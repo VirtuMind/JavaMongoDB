@@ -40,7 +40,7 @@ public class ClientDao {
             c.setPrenom(doc.getString("prenom"));
             c.setAdresse(doc.getString("adresse"));
             c.setTelephone(doc.getString("telephone"));
-            c.setCodePostal(doc.getString("code_postal"));
+            c.setCodePostal(doc.getInteger("code_postal"));
             list.add(c);
         }
         return list;

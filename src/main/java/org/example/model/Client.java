@@ -10,11 +10,11 @@ public class Client {
     private String prenom;
     private String adresse;
     private String telephone;
-    private String codePostal;
+    private Integer codePostal;
 
     public Client() {}
 
-    public Client(String nom, String prenom, String adresse, String telephone, String codePostal) {
+    public Client(String nom, String prenom, String adresse, String telephone, Integer codePostal) {
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
