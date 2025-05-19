@@ -9,11 +9,13 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CommandeDao {
+public class CommandeDao extends Component {
     private final MongoCollection<Document> collection;
 
     public CommandeDao(String connectionString, String dbName, String collectionName) {
@@ -33,18 +35,24 @@ public class CommandeDao {
     }
 
     public List<Commande> getAllCommandes() {
+        try{
         List<Commande> list = new ArrayList<>();
         for (Document doc : collection.find()) {
             Commande c = new Commande();
             c.setId(doc.getObjectId("_id"));
             c.setNum(doc.getString("num"));
-            c.setDate(doc.getString("date"));
+            c.setDate(doc.getDate("date"));
             c.setAdresseLivraison(doc.getString("adresse_livraison"));
             c.setClientId(doc.getObjectId("id_client"));
             c.setMontant(doc.getDouble("montant"));
             list.add(c);
         }
-        return list;
+            return list;
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erreur de format de date", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public void updateCommande(Commande cmd) {

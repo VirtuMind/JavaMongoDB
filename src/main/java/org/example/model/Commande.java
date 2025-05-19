@@ -9,14 +9,14 @@ import java.util.List;
 public class Commande {
     private ObjectId id;
     private String num;
-    private String date;
+    private Date date;
     private String adresseLivraison;
     private ObjectId clientId;
     private Double montant;
 
     public Commande() {}
 
-    public Commande(String num, String date, String adresseLivraison, ObjectId clientId, Double montant) {
+    public Commande(String num, Date date, String adresseLivraison, ObjectId clientId, Double montant) {
         this.num = num;
         this.date = date;
         this.adresseLivraison = adresseLivraison;

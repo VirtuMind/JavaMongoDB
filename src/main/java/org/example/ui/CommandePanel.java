@@ -9,13 +9,14 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class CommandePanel extends JPanel {
     private final CommandeDao commandeDao;
     private final LigneCmdDao ligneCmdDao;
     private DefaultTableModel tableModel;
-    private JTable table;
     private JTextField numField, dateField, adresseField, clientIdField, montantField, articleIdField, quanitieField;
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -86,7 +87,7 @@ public class CommandePanel extends JPanel {
         try {
             Commande c = new Commande(
                     numField.getText(),
-                    dateField.getText(),
+                    dateFormatter.parse(dateField.getText()),
                     adresseField.getText(),
                     clientIdField.getText().isEmpty() ? null : new ObjectId(clientIdField.getText()),
                     Double.parseDouble(montantField.getText())
@@ -103,9 +104,14 @@ public class CommandePanel extends JPanel {
         }
         catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Quantité et Montant doivent etre des nombres", "Données invalides", JOptionPane.ERROR_MESSAGE);
-        } catch (IllegalArgumentException ex) {
+        }
+        catch (IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(this, "ObjectId Invalid: " + ex.getMessage(), "Données invalides", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
+        }
+        catch (java.text.ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Date invalide: " + ex.getMessage(), "Date invalide", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erreur: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
