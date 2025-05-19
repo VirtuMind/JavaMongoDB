@@ -13,9 +13,8 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 public class ClientPanel extends JPanel {
-    private ClientDao dao;
+    private final ClientDao dao;
     private DefaultTableModel tableModel;
-    private JTable table;
     private JTextField nomField, prenomField, adresseField, telephoneField, codePostalField;
 
     public ClientPanel() {
@@ -45,7 +44,7 @@ public class ClientPanel extends JPanel {
         tableModel = new DefaultTableModel(new Object[]{"ID","Nom","Prénom","Adresse","Téléphone","Code Postal", "Actions"},0) {
         };
 
-        table = new JTable(tableModel);
+        JTable table = new JTable(tableModel);
         table.setRowHeight(30);
         JScrollPane scroll = new JScrollPane(table);
         add(inputPanel, BorderLayout.NORTH);
@@ -85,17 +84,29 @@ public class ClientPanel extends JPanel {
 
     // read the row’s values and call DAO.updateClient, then reload
     private void applyUpdate(int row) {
-        ObjectId id = new ObjectId((String) tableModel.getValueAt(row, 0));
-        Client c = new Client(
-                (String) tableModel.getValueAt(row, 1),
-                (String) tableModel.getValueAt(row, 2),
-                (String) tableModel.getValueAt(row, 3),
-                (String) tableModel.getValueAt(row, 4),
-                 Integer.parseInt((String) tableModel.getValueAt(row, 5))
-        );
-        c.setId(id);
-        dao.updateClient(c);
-        loadData();
+        try{
+            ObjectId id = new ObjectId((String) tableModel.getValueAt(row, 0));
+            Client c = new Client(
+                    (String) tableModel.getValueAt(row, 1),
+                    (String) tableModel.getValueAt(row, 2),
+                    (String) tableModel.getValueAt(row, 3),
+                    (String) tableModel.getValueAt(row, 4),
+                    Integer.parseInt((String) tableModel.getValueAt(row, 5))
+            );
+            c.setId(id);
+            dao.updateClient(c);
+            loadData();
+        }
+        catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Code postal doit etre un nombre", "Données invalides", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, "ObjectId Invalid: " + ex.getMessage(), "Données invalides", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erreur: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     // call DAO.deleteClient, then reload

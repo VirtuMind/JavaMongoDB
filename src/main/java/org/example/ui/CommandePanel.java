@@ -111,27 +111,23 @@ public class CommandePanel extends JPanel {
     }
 
     private void applyUpdate(int row) {
-        ObjectId id = new ObjectId((String) tableModel.getValueAt(row, 0));
-        Commande c = new Commande(
-                (String) tableModel.getValueAt(row, 1),
-                (String) tableModel.getValueAt(row, 2),
-                (String) tableModel.getValueAt(row, 3),
-                new ObjectId((String) tableModel.getValueAt(row, 4)),
-                (Double) tableModel.getValueAt(row, 5)
-        );
-        c.setId(id);
-        commandeDao.updateCommande(c);
+        try{
+            ObjectId id = new ObjectId((String) tableModel.getValueAt(row, 0));
+            Commande c = new Commande(
+                    (String) tableModel.getValueAt(row, 1),
+                    dateFormatter.parse((String) tableModel.getValueAt(row, 2)),
+                    (String) tableModel.getValueAt(row, 3),
+                    new ObjectId((String) tableModel.getValueAt(row, 4)),
+                    (Double) tableModel.getValueAt(row, 5)
+            );
+            c.setId(id);
 
-        // Update the LigneCmd associated with this Commande
-        LigneCmd lc = new LigneCmd(
-                c.getId(),
-                articleIdField.getText().isEmpty() ? null : new ObjectId(articleIdField.getText()),
-                Integer.parseInt(quanitieField.getText())
-        );
-        lc.setId(id);
-        ligneCmdDao.updateLigneCmd(lc);
+            commandeDao.updateCommande(c);
+            loadData();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Données invalides", JOptionPane.ERROR_MESSAGE);
+        }
 
-        loadData();
     }
 
     public void applyDelete(int row) {

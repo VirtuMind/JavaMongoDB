@@ -89,17 +89,28 @@ public class ArticlePanel extends JPanel {
 
     // read the row’s values and call DAO.updateClient, then reload
     private void applyUpdate(int row) {
-        ObjectId id = new ObjectId((String) tableModel.getValueAt(row, 0));
-        Article a = new Article(
-                (String) tableModel.getValueAt(row, 1),
-                (String) tableModel.getValueAt(row, 2),
-                (Double) tableModel.getValueAt(row, 3),
-                (String) tableModel.getValueAt(row, 4),
-                (String) tableModel.getValueAt(row, 5)
-        );
-        a.setId(id);
-        dao.updateArticle(a);
-        loadData();
+        try{
+            ObjectId id = new ObjectId((String) tableModel.getValueAt(row, 0));
+            Article a = new Article(
+                    (String) tableModel.getValueAt(row, 1),
+                    (String) tableModel.getValueAt(row, 2),
+                    (Double) tableModel.getValueAt(row, 3),
+                    (String) tableModel.getValueAt(row, 4),
+                    (String) tableModel.getValueAt(row, 5)
+            );
+            a.setId(id);
+            dao.updateArticle(a);
+            loadData();
+        }
+        catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Prix U doit etre un nombre", "Données invalides", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, "ObjectId Invalid: " + ex.getMessage(), "Données invalides", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erreur: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     // call DAO.deleteClient, then reload
