@@ -12,12 +12,12 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 public class CommandePanel extends JPanel {
-    private CommandeDao commandeDao;
-    private LigneCmdDao ligneCmdDao;
+    private final CommandeDao commandeDao;
+    private final LigneCmdDao ligneCmdDao;
     private DefaultTableModel tableModel;
     private JTable table;
     private JTextField numField, dateField, adresseField, clientIdField, montantField, articleIdField, quanitieField;
-    // private SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public CommandePanel() {
         commandeDao = new CommandeDao("mongodb://localhost:27017", "javadb", "commande");
@@ -29,12 +29,12 @@ public class CommandePanel extends JPanel {
 
     private void buildUI() {
         JPanel inputPanel = new JPanel(new FlowLayout());
-        numField = new JTextField(5);
+        numField = new JTextField(12);
         dateField = new JTextField(8);
-        adresseField = new JTextField(12);
-        clientIdField = new JTextField(12);
+        adresseField = new JTextField(15);
+        clientIdField = new JTextField(15);
         montantField = new JTextField(5);
-        articleIdField = new JTextField(12);
+        articleIdField = new JTextField(15);
         quanitieField = new JTextField(5);
         inputPanel.add(new JLabel("Num:")); inputPanel.add(numField);
         inputPanel.add(new JLabel("Date (yyyy-MM-dd):")); inputPanel.add(dateField);
@@ -52,7 +52,7 @@ public class CommandePanel extends JPanel {
             new Object[]{"ID","Num","Date","Adresse","ClientID","Montant", "Actions"}, 0
         ) {
         };
-        table = new JTable(tableModel);
+        JTable table = new JTable(tableModel);
         table.setRowHeight(30);
         add(inputPanel, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
